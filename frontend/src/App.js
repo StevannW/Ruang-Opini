@@ -172,7 +172,7 @@ function App() {
                 <h2 className={`text-2xl font-bold ${
                   darkMode ? 'text-white' : 'text-gray-800'
                 }`}>
-                  Welcome to GovSense
+                  Welcome to RuangOpini
                 </h2>
                 <p className={`text-sm max-w-md mx-auto ${
                   darkMode ? 'text-gray-400' : 'text-gray-600'
@@ -307,7 +307,7 @@ function App() {
       <footer className={`text-center py-4 text-xs ${
         darkMode ? 'text-gray-600' : 'text-gray-500'
       }`}>
-        Powered by Google Gemini AI • GovSense v1.0
+        
       </footer>
     </div>
   );

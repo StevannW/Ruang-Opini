@@ -14,9 +14,7 @@ function Header({ darkMode, setDarkMode }) {
               <h1 className={`text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent`}>
                 RuangOpini
               </h1>
-              <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                AI-Powered Content Analysis
-              </p>
+            
             </div>
           </div>
           
