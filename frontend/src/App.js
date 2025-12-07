@@ -4,7 +4,7 @@ import Header from './components/Header';
 import MessageBubble from './components/MessageBubble';
 import TypingIndicator from './components/TypingIndicator';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const WEBHOOK_URL = 'https://n8n.ruangopini.app/webhook/0d219d6d-03af-4eae-a994-3fa4eb8287b8';
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -77,31 +77,59 @@ function App() {
     setMessages(prev => [...prev, userMessage]);
     setInputText('');
     const imageToSubmit = selectedImage;
+    const imagePreviewToSubmit = imagePreview;
     handleRemoveImage();
     
     setLoading(true);
 
     try {
-      let response;
+      let payload = {};
       
-      if (imageToSubmit) {
-        // Image classification
-        const formData = new FormData();
-        formData.append('file', imageToSubmit);
-        response = await axios.post(`${API_URL}/classify_image`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+      if (imageToSubmit && imagePreviewToSubmit) {
+        // Image classification - convert image to base64
+        // Extract base64 data from data URL (remove the "data:image/xxx;base64," prefix)
+        const base64Data = imagePreviewToSubmit.split(',')[1];
+        payload = {
+          deskripsi: userMessage.text || '',
+          image: base64Data
+        };
       } else {
         // Text classification
-        response = await axios.post(`${API_URL}/classify_text`, {
-          text: userMessage.text
-        });
+        payload = {
+          deskripsi: userMessage.text,
+          image: ''
+        };
       }
+
+      // Call webhook
+      const response = await axios.post(WEBHOOK_URL, payload, {
+        headers: { 
+          'Content-Type': 'application/json'
+        }
+      });
+
+      // Transform webhook response to match UI expectations
+      const webhookData = response.data;
+      const transformedResult = {
+        scores: webhookData.scores,
+        reasoning: webhookData.reasoning,
+        key_findings: webhookData.key_findings,
+        red_flags: webhookData.red_flags,
+        final_scores: {
+          constructive_score_weighted: webhookData.final_calculation.constructive_score_weighted,
+          destructive_score_weighted: webhookData.final_calculation.destructive_score_weighted,
+          classification: webhookData.final_calculation.classification,
+          constructive_percentage: webhookData.final_calculation.constructive_score_weighted,
+          destructive_percentage: webhookData.final_calculation.destructive_score_weighted
+        },
+        explanation: `Klasifikasi: ${webhookData.final_calculation.classification}`,
+        timestamp: new Date().toISOString()
+      };
 
       // Add AI response
       const aiMessage = {
         role: 'assistant',
-        result: response.data,
+        result: transformedResult,
         timestamp: new Date().toISOString()
       };
       
@@ -109,7 +137,7 @@ function App() {
     } catch (err) {
       const errorMessage = {
         role: 'assistant',
-        text: `❌ Error: ${err.response?.data?.detail || 'Failed to analyze content. Please try again.'}`,
+        text: `❌ Error: ${err.response?.data?.detail || err.message || 'Failed to analyze content. Please try again.'}`,
         timestamp: new Date().toISOString()
       };
       setMessages(prev => [...prev, errorMessage]);
