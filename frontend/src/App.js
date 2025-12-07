@@ -13,6 +13,8 @@ function App() {
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [isClosingDisclaimer, setIsClosingDisclaimer] = useState(false);
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
   const textareaRef = useRef(null);
@@ -158,6 +160,48 @@ function App() {
       darkMode ? 'dark bg-gray-950' : 'bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50'
     }`}>
       <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+      
+      {/* Disclaimer Modal */}
+      {showDisclaimer && (
+        <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 ${
+          isClosingDisclaimer ? 'animate-fade-out' : 'animate-fade-in'
+        }`}>
+          <div className={`max-w-md w-full rounded-2xl shadow-2xl ${
+            isClosingDisclaimer ? 'animate-scale-out' : 'animate-scale-in'
+          } ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white'}`}>
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                  <span className="text-2xl">⚠️</span>
+                </div>
+                <h2 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  Disclaimer
+                </h2>
+              </div>
+              
+              <p className={`text-sm leading-relaxed mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                The evaluations and results provided by this system are generated automatically and may not be 100% accurate. 
+                Variations, errors, or misclassifications can occur due to limitations in data, environmental conditions, or system processing. 
+                Please use the results as guidance only and verify when necessary.
+              </p>
+              
+              <button
+                onClick={() => {
+                  setIsClosingDisclaimer(true);
+                  setTimeout(() => {
+                    setShowDisclaimer(false);
+                    setIsClosingDisclaimer(false);
+                  }, 300);
+                }}
+                className="w-full py-3 rounded-xl font-medium transition-all-smooth hover-lift
+                  bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600"
+              >
+                I Understand
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Main Chat Area */}
       <main className="flex-1 container mx-auto px-4 py-6 max-w-4xl flex flex-col">
