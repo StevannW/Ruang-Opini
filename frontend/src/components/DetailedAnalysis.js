@@ -117,48 +117,23 @@ function DetailedAnalysis({ data, darkMode }) {
         )}
       </div>
 
-      {/* Red Flags or No Red Flags */}
-      <div className={`p-6 border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
-        <div className={`rounded-xl p-4 border-2 border-l-4 ${
-          data.red_flags && data.red_flags.length > 0
-            ? darkMode ? 'bg-red-900/20 border-red-700' : 'bg-red-50 border-red-300'
-            : darkMode ? 'bg-green-900/20 border-green-700' : 'bg-green-50 border-green-300'
-        }`}>
-          <h4 className={`font-bold mb-2 ${
-            data.red_flags && data.red_flags.length > 0
-              ? darkMode ? 'text-red-400' : 'text-red-700'
-              : darkMode ? 'text-green-400' : 'text-green-700'
+      {/* Red Flags */}
+      {data.red_flags && data.red_flags.length > 0 && (
+        <div className={`p-6 border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+          <div className={`rounded-xl p-4 border-2 border-l-4 ${
+            darkMode ? 'bg-red-900/20 border-red-700' : 'bg-red-50 border-red-300'
           }`}>
-            {data.red_flags && data.red_flags.length > 0 ? '🚨 Red Flag Ditemukan' : '✅ Tidak Ada Red Flag Utama Ditemukan'}
-          </h4>
-          {data.red_flags && data.red_flags.length > 0 ? (
+            <h4 className={`font-bold mb-2 ${darkMode ? 'text-red-400' : 'text-red-700'}`}>
+              🚨 Red Flag Ditemukan
+            </h4>
             <ul className={`list-disc list-inside text-sm ${darkMode ? 'text-red-300' : 'text-red-600'}`}>
               {data.red_flags.map((flag, index) => (
                 <li key={index}>{flag}</li>
               ))}
             </ul>
-          ) : (
-            <ul className={`text-sm space-y-1 ${darkMode ? 'text-green-300' : 'text-green-700'}`}>
-              <li className="flex items-start gap-2">
-                <span>✓</span>
-                <span>**Misinformasi:** Minimal, skor 10/100, menunjukkan keakuratan tinggi.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span>✓</span>
-                <span>**Serangan Personal:** Tidak ada, skor 10/100, fokus pada isu bukan individu.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span>✓</span>
-                <span>**Ujaran Kebencian:** Sangat rendah, skor 10/100, mencerminkan bahasa inklusif.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span>✓</span>
-                <span>**Bahasa Provokatif:** Sangat rendah, skor 10/100, nada tenang dan bertanggung jawab.</span>
-              </li>
-            </ul>
-          )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Key Findings */}
       {data.key_findings && data.key_findings.length > 0 && (
