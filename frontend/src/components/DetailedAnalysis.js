@@ -47,11 +47,11 @@ function DetailedAnalysis({ data, darkMode }) {
   };
 
   const criteriaNames = {
-    keterkaitan_fakta: 'Dasar Faktual',
-    kejujuran_intelektual: 'Nada & Respek',
-    mendorong_berpikir_kritis: 'Berorientasi Solusi',
-    kesadaran_kekuasaan: 'Fokus pada Isu',
-    kreativitas: 'Niat Sarkasme',
+    keterkaitan_fakta: 'Keterkaitan Fakta',
+    kejujuran_intelektual: 'Kejujuran Intelektual',
+    mendorong_berpikir_kritis: 'Mendorong berpikir kritis',
+    kesadaran_kekuasaan: 'Kesadaran Kekuasaan',
+    kreativitas: 'Kreativitas',
     informasi_salah: 'Misinformasi',
     kebencian_perpecahan: 'Ujaran Kebencian',
     penghinaan_pribadi: 'Serangan Personal',
